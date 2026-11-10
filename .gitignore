@@ -218,3 +218,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Virtual Environment
+.venv/
+
+# Output Files
+outputs/
+
+# Semantic Models
+*.bim
+*.tmdl
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
