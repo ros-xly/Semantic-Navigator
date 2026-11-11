@@ -24,9 +24,6 @@ from excel.exporter import (
     create_data_dictionary
 )
 
-from ai.openai_dictionary_ai import (
-    test_connection
-)
 
 tables = parse_model_folder(
     r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\samples\simple_model\tables"
@@ -52,10 +49,6 @@ create_data_dictionary(
     tables,
     lineage,
     impact
-)
-
-print(
-    test_connection()
 )
 
 print(
