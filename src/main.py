@@ -4,10 +4,11 @@ sys.path.append(
     r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\src"
 )
 
-from parser.tmdl_parser import parse_tmdl_file
+from parser.model_parser import parse_model_folder
 
-customer_table = parse_tmdl_file(
-    r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\samples\simple_model\tables\Customer.tmdl"
+tables = parse_model_folder(
+    r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\samples\simple_model\tables"
 )
 
-print(customer_table)
+for table in tables:
+    print(table)
