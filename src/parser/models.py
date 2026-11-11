@@ -4,8 +4,18 @@ from typing import List
 
 @dataclass
 class Column:
+
     name: str
+
     data_type: str
+
+    definition: str = ""
+
+    synonyms: list = None
+
+    alternative_names: list = None
+
+    business_domain: str = ""
 
 
 @dataclass
