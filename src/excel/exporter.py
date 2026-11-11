@@ -11,19 +11,22 @@ def create_data_dictionary(
 
     workbook = Workbook()
 
-    # -------------------------
-    # Data Dictionary
-    # -------------------------
+    # =====================================
+    # DATA DICTIONARY
+    # =====================================
 
-    sheet = workbook.active
+    dictionary_sheet = workbook.active
 
-    sheet.title = "Data Dictionary"
+    dictionary_sheet.title = "Data Dictionary"
 
-    sheet.append(
+    dictionary_sheet.append(
         [
             "Table",
             "Field",
-            "Data Type"
+            "Data Type",
+            "Definition",
+            "Business Domain",
+            "Synonyms"
         ]
     )
 
@@ -31,17 +34,27 @@ def create_data_dictionary(
 
         for column in table.columns:
 
-            sheet.append(
+            synonyms = ""
+
+            if column.synonyms:
+                synonyms = ", ".join(
+                    column.synonyms
+                )
+
+            dictionary_sheet.append(
                 [
                     table.name,
                     column.name,
-                    column.data_type
+                    column.data_type,
+                    column.definition,
+                    column.business_domain,
+                    synonyms
                 ]
             )
 
-    # -------------------------
-    # Lineage Sheet
-    # -------------------------
+    # =====================================
+    # LINEAGE
+    # =====================================
 
     if lineage:
 
@@ -61,13 +74,15 @@ def create_data_dictionary(
             lineage_sheet.append(
                 [
                     item["measure"],
-                    ", ".join(item["dependencies"])
+                    ", ".join(
+                        item["dependencies"]
+                    )
                 ]
             )
 
-    # -------------------------
-    # Impact Sheet
-    # -------------------------
+    # =====================================
+    # IMPACT ANALYSIS
+    # =====================================
 
     if impact:
 
@@ -91,9 +106,9 @@ def create_data_dictionary(
                 ]
             )
 
-    # -------------------------
-    # Save
-    # -------------------------
+    # =====================================
+    # SAVE FILE
+    # =====================================
 
     output_file = Path(
         r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\outputs\DataDictionary.xlsx"
