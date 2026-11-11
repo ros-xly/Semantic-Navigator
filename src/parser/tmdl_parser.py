@@ -13,7 +13,7 @@ def parse_tmdl_file(file_path: str) -> Table:
 
     current_column = None
 
-    for line in lines:
+    for index, line in enumerate(lines):
 
         stripped = line.strip()
 
@@ -45,10 +45,15 @@ def parse_tmdl_file(file_path: str) -> Table:
                 .strip()
             )
 
+            expression = ""
+
+            if index + 1 < len(lines):
+                expression = lines[index + 1].strip()
+
             measures.append(
                 Measure(
                     name=measure_name,
-                    expression=""
+                    expression = expression
                 )
             )
 
