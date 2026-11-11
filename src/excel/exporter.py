@@ -53,7 +53,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # DEPENDENCY LOOKUP
+    # BUILD DEPENDENCY LOOKUP
     # =====================================
 
     dependency_map = {}
@@ -104,7 +104,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # LINEAGE
+    # LINEAGE SHEET
     # =====================================
 
     if lineage:
@@ -132,7 +132,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # IMPACT ANALYSIS
+    # IMPACT ANALYSIS SHEET
     # =====================================
 
     if impact:
@@ -160,7 +160,44 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # SAVE
+    # FORMAT COLUMNS
+    # =====================================
+
+    for sheet in workbook.worksheets:
+
+        for column in sheet.columns:
+
+            max_length = 0
+
+            column_letter = (
+                column[0]
+                .column_letter
+            )
+
+            for cell in column:
+
+                try:
+
+                    value_length = len(
+                        str(cell.value)
+                    )
+
+                    if value_length > max_length:
+                        max_length = value_length
+
+                except Exception:
+                    pass
+
+            adjusted_width = (
+                max_length + 4
+            )
+
+            sheet.column_dimensions[
+                column_letter
+            ].width = adjusted_width
+
+    # =====================================
+    # SAVE FILE
     # =====================================
 
     output_file = Path(
