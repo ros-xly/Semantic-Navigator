@@ -17,6 +17,10 @@ tables = parse_model_folder(
     r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\samples\simple_model\tables"
 )
 
+from ai.enrichment import enrich_columns
+
+tables = enrich_columns(tables)
+
 print_model_summary(tables)
 
 lineage = build_lineage(tables)
@@ -33,4 +37,8 @@ create_data_dictionary(
 
 print(
     "\nExcel Data Dictionary Generated"
+)
+
+print(
+    tables[1].columns[1].definition
 )
