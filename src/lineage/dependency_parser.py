@@ -1,5 +1,6 @@
 import re
 
+
 def extract_dependencies(expression):
 
     matches = re.findall(

@@ -2,6 +2,7 @@ from lineage.dependency_parser import (
     extract_dependencies
 )
 
+
 def build_lineage(tables):
 
     lineage = []
@@ -22,4 +23,3 @@ def build_lineage(tables):
             )
 
     return lineage
-
