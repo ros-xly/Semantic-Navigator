@@ -24,12 +24,20 @@ from excel.exporter import (
     create_data_dictionary
 )
 
+from ai.measure_enrichment import (
+    enrich_measures
+)
+
 
 tables = parse_model_folder(
     r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\samples\simple_model\tables"
 )
 
 tables = enrich_columns(
+    tables
+)
+
+tables = enrich_measures(
     tables
 )
 
@@ -53,4 +61,8 @@ create_data_dictionary(
 
 print(
     "\nExcel Data Dictionary Generated"
+)
+
+print(
+    tables[1].measures[0].definition
 )
