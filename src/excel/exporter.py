@@ -53,6 +53,22 @@ def create_data_dictionary(
             )
 
     # =====================================
+    # DEPENDENCY LOOKUP
+    # =====================================
+
+    dependency_map = {}
+
+    if lineage:
+
+        for item in lineage:
+
+            dependency_map[
+                item["measure"]
+            ] = ", ".join(
+                item["dependencies"]
+            )
+
+    # =====================================
     # MEASURES
     # =====================================
 
@@ -65,7 +81,8 @@ def create_data_dictionary(
             "Measure",
             "Friendly Name",
             "Definition",
-            "Purpose"
+            "Purpose",
+            "Dependencies"
         ]
     )
 
@@ -78,7 +95,11 @@ def create_data_dictionary(
                     measure.name,
                     measure.friendly_name,
                     measure.definition,
-                    measure.purpose
+                    measure.purpose,
+                    dependency_map.get(
+                        measure.name,
+                        ""
+                    )
                 ]
             )
 
@@ -132,12 +153,14 @@ def create_data_dictionary(
             impact_sheet.append(
                 [
                     field,
-                    ", ".join(measures)
+                    ", ".join(
+                        measures
+                    )
                 ]
             )
 
     # =====================================
-    # SAVE FILE
+    # SAVE
     # =====================================
 
     output_file = Path(
