@@ -11,5 +11,12 @@ tables = parse_model_folder(
 )
 from reporting.console_report import print_model_summary
 
-for table in tables:
-   print_model_summary(tables)
+print_model_summary(tables)
+
+from excel.exporter import create_data_dictionary
+
+create_data_dictionary(tables)
+
+print(
+    "\nExcel Data Dictionary Generated"
+)
