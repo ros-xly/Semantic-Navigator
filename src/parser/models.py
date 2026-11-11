@@ -20,8 +20,16 @@ class Column:
 
 @dataclass
 class Measure:
+
     name: str
+
     expression: str
+
+    definition: str = ""
+
+    purpose: str = ""
+
+    friendly_name: str = ""
 
 
 @dataclass
