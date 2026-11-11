@@ -53,6 +53,36 @@ def create_data_dictionary(
             )
 
     # =====================================
+    # MEASURES
+    # =====================================
+
+    measure_sheet = workbook.create_sheet(
+        "Measures"
+    )
+
+    measure_sheet.append(
+        [
+            "Measure",
+            "Friendly Name",
+            "Definition",
+            "Purpose"
+        ]
+    )
+
+    for table in tables:
+
+        for measure in table.measures:
+
+            measure_sheet.append(
+                [
+                    measure.name,
+                    measure.friendly_name,
+                    measure.definition,
+                    measure.purpose
+                ]
+            )
+
+    # =====================================
     # LINEAGE
     # =====================================
 
@@ -114,7 +144,9 @@ def create_data_dictionary(
         r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\outputs\DataDictionary.xlsx"
     )
 
-    workbook.save(output_file)
+    workbook.save(
+        output_file
+    )
 
     print(
         f"Workbook saved to: {output_file}"
