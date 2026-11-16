@@ -54,7 +54,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # BUILD DEPENDENCY LOOKUP
+    # DEPENDENCY LOOKUP
     # =====================================
 
     dependency_map = {}
@@ -105,7 +105,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # LINEAGE SHEET
+    # LINEAGE
     # =====================================
 
     if lineage:
@@ -133,7 +133,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # IMPACT ANALYSIS SHEET
+    # IMPACT ANALYSIS
     # =====================================
 
     if impact:
@@ -160,35 +160,36 @@ def create_data_dictionary(
                 ]
             )
 
+    # =====================================
+    # ONTOLOGY
+    # =====================================
 
-    #=====================================
-    # ONTOLOGY SHEET
-    #=====================================
+    if ontology:
 
-ontology_sheet = workbook.create_sheet(
-    "Ontology"
-)
+        ontology_sheet = workbook.create_sheet(
+            "Ontology"
+        )
 
-ontology_sheet.append(
-    [
-        "Domain",
-        "Concept",
-        "Source Type"
-    ]
-)
+        ontology_sheet.append(
+            [
+                "Domain",
+                "Concept",
+                "Source Type"
+            ]
+        )
 
-for node in ontology:
+        for node in ontology:
 
-    ontology_sheet.append(
-        [
-            node.domain,
-            node.concept,
-            node.source_type
-        ]
-    )
+            ontology_sheet.append(
+                [
+                    node.domain,
+                    node.concept,
+                    node.source_type
+                ]
+            )
 
     # =====================================
-    # FORMAT COLUMNS
+    # AUTO SIZE COLUMNS
     # =====================================
 
     for sheet in workbook.worksheets:
@@ -198,34 +199,31 @@ for node in ontology:
             max_length = 0
 
             column_letter = (
-                column[0]
-                .column_letter
+                column[0].column_letter
             )
 
             for cell in column:
 
                 try:
 
-                    value_length = len(
+                    length = len(
                         str(cell.value)
                     )
 
-                    if value_length > max_length:
-                        max_length = value_length
+                    if length > max_length:
+
+                        max_length = length
 
                 except Exception:
-                    pass
 
-            adjusted_width = (
-                max_length + 4
-            )
+                    pass
 
             sheet.column_dimensions[
                 column_letter
-            ].width = adjusted_width
+            ].width = max_length + 4
 
     # =====================================
-    # SAVE FILE
+    # SAVE
     # =====================================
 
     output_file = Path(
