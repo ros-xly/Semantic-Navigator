@@ -7,7 +7,8 @@ def create_data_dictionary(
     tables,
     lineage=None,
     impact=None,
-    ontology=None
+    ontology=None,
+    governance_summary=None
 ):
 
     workbook = Workbook()
@@ -185,6 +186,32 @@ def create_data_dictionary(
                     node.domain,
                     node.concept,
                     node.source_type
+                ]
+            )
+
+    # =====================================
+    # GOVERNANCE
+    # =====================================
+
+    if governance_summary:
+
+        governance_sheet = workbook.create_sheet(
+            "Governance"
+        )
+
+        governance_sheet.append(
+            [
+                "Metric",
+                "Score"
+            ]
+        )
+
+        for metric, score in governance_summary:
+
+            governance_sheet.append(
+                [
+                    metric,
+                    score
                 ]
             )
 
