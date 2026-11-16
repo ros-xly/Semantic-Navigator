@@ -4,3 +4,4 @@ xlsxwriter
 networkx
 openai
 python-dotenv
+streamlit
