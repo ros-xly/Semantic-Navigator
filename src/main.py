@@ -4,25 +4,9 @@ sys.path.append(
     r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\src"
 )
 
-# =====================================
-# PARSER
-# =====================================
-
 from parser.model_parser import (
     parse_model_folder
 )
-
-# =====================================
-# REPORTING
-# =====================================
-
-from reporting.console_report import (
-    print_model_summary
-)
-
-# =====================================
-# AI ENRICHMENT
-# =====================================
 
 from ai.enrichment import (
     enrich_columns
@@ -32,10 +16,6 @@ from ai.measure_enrichment import (
     enrich_measures
 )
 
-# =====================================
-# LINEAGE
-# =====================================
-
 from lineage.lineage_builder import (
     build_lineage
 )
@@ -43,10 +23,6 @@ from lineage.lineage_builder import (
 from lineage.impact_analysis import (
     build_impact_analysis
 )
-
-# =====================================
-# ONTOLOGY
-# =====================================
 
 from ontology.ontology_builder import (
     build_ontology
@@ -59,10 +35,6 @@ from ontology.ontology_report import (
 from ontology.ontology_scoring import (
     score_ontology
 )
-
-# =====================================
-# GOVERNANCE
-# =====================================
 
 from governance.coverage_scoring import (
     score_field_coverage
@@ -88,117 +60,132 @@ from governance.governance_builder import (
     build_governance_summary
 )
 
-# =====================================
-# EXCEL
-# =====================================
-
 from excel.exporter import (
     create_data_dictionary
 )
 
-# =====================================
-# LOAD MODEL
-# =====================================
-
-
-# =====================================
-# ENRICH DATA
-# =====================================
-
-tables = enrich_columns(
-    tables
+from input.model_input import (
+    get_model_path
 )
 
-tables = enrich_measures(
-    tables
+from input.model_validation import (
+    validate_model_path
 )
 
-# =====================================
-# BUILD LINEAGE
-# =====================================
-
-lineage = build_lineage(
-    tables
+from input.model_metadata import (
+    get_model_name
 )
 
-impact = build_impact_analysis(
-    lineage
+from input.error_handler import (
+    handle_error
 )
 
-# =====================================
-# BUILD ONTOLOGY
-# =====================================
-
-ontology = build_ontology(
-    tables
+from reporting.process_report import (
+    print_processing_report
 )
 
-# =====================================
-# GOVERNANCE SCORING
-# =====================================
+try:
 
-field_score = score_field_coverage(
-    tables
-)
+    model_path = get_model_path()
 
-measure_score = score_measure_coverage(
-    tables
-)
+    validate_model_path(
+        model_path
+    )
 
-ontology_score = score_ontology_coverage(
-    ontology
-)
+    model_name = get_model_name(
+        model_path
+    )
 
-health_score = calculate_health_score(
-    field_score,
-    measure_score,
-    ontology_score
-)
+    tables = parse_model_folder(
+        str(model_path)
+    )
 
-governance_summary = (
-    build_governance_summary(
+    tables = enrich_columns(
+        tables
+    )
+
+    tables = enrich_measures(
+        tables
+    )
+
+    lineage = build_lineage(
+        tables
+    )
+
+    impact = build_impact_analysis(
+        lineage
+    )
+
+    ontology = build_ontology(
+        tables
+    )
+
+    field_score = (
+        score_field_coverage(
+            tables
+        )
+    )
+
+    measure_score = (
+        score_measure_coverage(
+            tables
+        )
+    )
+
+    ontology_score = (
+        score_ontology_coverage(
+            ontology
+        )
+    )
+
+    health_score = (
+        calculate_health_score(
+            field_score,
+            measure_score,
+            ontology_score
+        )
+    )
+
+    governance_summary = (
+        build_governance_summary(
+            field_score,
+            measure_score,
+            ontology_score,
+            health_score
+        )
+    )
+
+    print_processing_report(
+        model_name,
+        tables
+    )
+
+    print_ontology_summary(
+        ontology
+    )
+
+    score_ontology(
+        ontology
+    )
+
+    print_governance_report(
         field_score,
         measure_score,
         ontology_score,
         health_score
     )
-)
 
-# =====================================
-# CONSOLE OUTPUT
-# =====================================
+    create_data_dictionary(
+        tables,
+        model_name,
+        lineage,
+        impact,
+        ontology,
+        governance_summary
+    )
 
-print_model_summary(
-    tables
-)
+except Exception as error:
 
-print_ontology_summary(
-    ontology
-)
-
-score_ontology(
-    ontology
-)
-
-print_governance_report(
-    field_score,
-    measure_score,
-    ontology_score,
-    health_score
-)
-
-# =====================================
-# EXCEL OUTPUT
-# =====================================
-
-create_data_dictionary(
-    tables,
-    lineage,
-    impact,
-    ontology,
-    governance_summary
-)
-
-print(
-    "\nExcel Data Dictionary Generated"
-)
+    handle_error(
+        error
+    )
