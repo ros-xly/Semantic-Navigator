@@ -3,16 +3,26 @@ from pathlib import Path
 
 def get_latest_excel():
 
-    outputs = Path(
+    output_folder = Path(
         "outputs"
     )
 
     files = list(
-        outputs.glob("*.xlsx")
+        output_folder.glob(
+            "*.xlsx"
+        )
     )
 
+    if not*files:
+
+        raise Exception(
+ *          "No Excel files found."
+*       )
+
     files.sort(
+        *ey=lambda x: x.stat()
+        .st_*time,
         reverse=True
     )
 
-    return files[0]
+*   return files[0]

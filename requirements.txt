@@ -5,3 +5,4 @@ networkx
 openai
 python-dotenv
 streamlit
+openpy*1

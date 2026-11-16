@@ -12,6 +12,50 @@ from parser.model_parser import (
     parse_model_folder
 )
 
+from ai.enrichment import (
+    enrich_columns
+)
+
+from ai.measure_enrichment import (
+    enrich_measures
+)
+
+from lineage.lineage_builder import (
+    build_lineage
+)
+
+from lineage.impact_analysis import (
+    build_impact_analysis
+)
+
+from ontology.ontology_builder import (
+    build_ontology
+)
+
+from governance.coverage_scoring import (
+    score_field_coverage
+)
+
+from governance.measure_scoring import (
+    score_measure_coverage
+)
+
+from governance.ontology_scoring import (
+    score_ontology_coverage
+)
+
+from governance.health_score import (
+    calculate_health_score
+)
+
+from governance.governance_builder import (
+    build_governance_summary
+)
+
+from excel.exporter import (
+    create_data_dictionary
+)
+
 st.set_page_config(
     page_title="Semantic Navigator",
     layout="wide"
@@ -25,7 +69,7 @@ st.write(
     """
 AI-powered semantic model documentation,
 ontology generation and governance
-assessment for Power BI semantic models.
+assessment.
 """
 )
 
@@ -41,21 +85,115 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files:
 
-    folder = save_uploaded_files(
-        uploaded_files
-    )
+    with st.spinner(
+        "Processing semantic model..."
+    ):
 
-    tables = parse_model_folder(
-        str(folder)
-    )
+        folder = save_uploaded_files(
+            uploaded_files
+        )
+
+        model_name = "Uploaded_Model"
+
+        # --------------------
+        # Parse
+        # --------------------
+
+        tables = parse_model_folder(
+            str(folder)
+        )
+
+        # --------------------
+        # AI Enrichment
+        # --------------------
+
+        tables = enrich_columns(
+            tables
+        )
+
+        tables = enrich_measures(
+            tables
+        )
+
+        # --------------------
+        # Lineage
+        # --------------------
+
+        lineage = build_lineage(
+            tables
+        )
+
+        impact = build_impact_analysis(
+            lineage
+        )
+
+        # --------------------
+        # Ontology
+        # --------------------
+
+        ontology = build_ontology(
+            tables
+        )
+
+        # --------------------
+        # Governance
+        # --------------------
+
+        field_score = (
+            score_field_coverage(
+                tables
+            )
+        )
+
+        measure_score = (
+            score_measure_coverage(
+                tables
+            )
+        )
+
+        ontology_score = (
+            score_ontology_coverage(
+                ontology
+            )
+        )
+
+        health_score = (
+            calculate_health_score(
+                field_score,
+                measure_score,
+                ontology_score
+            )
+        )
+
+        governance_summary = (
+            build_governance_summary(
+                field_score,
+                measure_score,
+                ontology_score,
+                health_score
+            )
+        )
+
+        # --------------------
+        # Excel
+        # --------------------
+
+        create_data_dictionary(
+            tables,
+            model_name,
+            lineage,
+            impact,
+            ontology,
+            governance_summary
+        )
 
     st.success(
-        "Semantic model parsed successfully."
+        "Documentation generated."
     )
 
-    # -----------------------
-    # Dashboard Metrics
-    # -----------------------
+    # --------------------
+    # Dashboard
+    # --------------------
 
     table_count = len(
         tables
@@ -88,32 +226,25 @@ if uploaded_files:
         measure_count
     )
 
-    # -----------------------
-    # Download Excel
-    # -----------------------
+    # --------------------
+    # Download
+    # --------------------
 
-    try:
+    excel_file = get_latest_excel()
 
-        excel_file = get_latest_excel()
+    with open(
+        excel_file,
+        "rb"
+    ) as file:
 
-        with open(
-            excel_file,
-            "rb"
-        ) as file:
-
-            st.download_button(
-                label="Download Documentation",
-                data=file,
-                file_name=excel_file.name,
-                mime=(
-                    "application/"
-                    "vnd.openxmlformats-officedocument."
-                    "spreadsheetml.sheet"
-                )
+        st.download_button(
+            label="Download Documentation",
+            data=file,
+            file_name=excel_file.name,
+            mime=(
+                "application/vnd."
+                "openxmlformats-"
+                "officedocument."
+                "spreadsheetml.sheet"
             )
-
-    except Exception:
-
-        st.warning(
-            "No documentation workbook found."
         )
