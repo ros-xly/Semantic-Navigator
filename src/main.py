@@ -41,6 +41,14 @@ tables = enrich_measures(
     tables
 )
 
+from ontology.ontology_builder import (
+    build_ontology
+)
+
+ontology = build_ontology(
+    tables
+)
+
 print_model_summary(
     tables
 )
