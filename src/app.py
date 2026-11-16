@@ -1,5 +1,13 @@
 import streamlit as st
 
+from ui.file_loader import (
+    save_uploaded_files
+)
+
+from parser.model_parser import (
+    parse_model_folder
+)
+
 
 st.set_page_config(
     page_title="Semantic Navigator",
@@ -8,13 +16,6 @@ st.set_page_config(
 
 st.title(
     "Semantic Navigator"
-)
-
-st.write(
-    """
-AI-powered semantic model
-documentation and governance.
-"""
 )
 
 uploaded_files = st.file_uploader(
@@ -29,6 +30,18 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files:
 
+    folder = save_uploaded_files(
+        uploaded_files
+    )
+
+    tables = parse_model_folder(
+        str(folder)
+    )
+
     st.success(
-        f"{len(uploaded_files)} files uploaded."
+        "Semantic model parsed."
+    )
+
+    st.write(
+        f"Tables Found: {len(tables)}"
     )
