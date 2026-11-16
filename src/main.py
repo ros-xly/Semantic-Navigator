@@ -100,9 +100,6 @@ from excel.exporter import (
 # LOAD MODEL
 # =====================================
 
-tables = parse_model_folder(
-    r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\samples\simple_model\tables"
-)
 
 # =====================================
 # ENRICH DATA
