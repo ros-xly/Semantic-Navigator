@@ -1,11 +1,19 @@
 import os
 
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 from openai import AzureOpenAI
 
 
-load_dotenv()
+env_path = Path(
+    r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\.env"
+)
+
+load_dotenv(
+    dotenv_path=env_path
+)
 
 
 client = AzureOpenAI(

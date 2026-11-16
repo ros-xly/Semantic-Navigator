@@ -1,12 +1,19 @@
 import os
 
+from pathlib import Path
+
 from dotenv import load_dotenv
 
 from openai import AzureOpenAI
 
 
-load_dotenv()
+env_path = Path(
+    r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\.env"
+)
 
+load_dotenv(
+    dotenv_path=env_path
+)
 
 client = AzureOpenAI(
 
@@ -22,7 +29,6 @@ client = AzureOpenAI(
 
 )
 
-
 response = client.chat.completions.create(
 
     model=os.getenv(
@@ -30,7 +36,6 @@ response = client.chat.completions.create(
     ),
 
     messages=[
-
         {
             "role": "user",
 
@@ -40,14 +45,11 @@ response = client.chat.completions.create(
                 "for SalesAmount."
             )
         }
-
     ]
 
 )
 
 print(
-
     response.choices[0]
     .message.content
-
 )
