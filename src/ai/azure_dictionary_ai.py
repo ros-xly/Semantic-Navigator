@@ -55,3 +55,97 @@ Return only the definition.
         .message.content
         .strip()
     )
+
+def generate_synonyms(
+    field_name
+):
+
+    response = (
+        client.chat.completions.create(
+
+            model=os.getenv(
+                "AZURE_OPENAI_MODEL"
+            ),
+
+            messages=[
+
+                {
+                    "role": "user",
+
+                    "content":
+                    (
+                        f"""
+Provide three business synonyms.
+
+Return only comma-separated values.
+
+Field:
+
+{field_name}
+"""
+                    )
+                }
+
+            ]
+
+        )
+    )
+
+    return (
+
+        response.choices[0]
+        .message.content
+        .split(",")
+
+    )
+
+def generate_domain(
+    field_name
+):
+
+    response = (
+        client.chat.completions.create(
+
+            model=os.getenv(
+                "AZURE_OPENAI_MODEL"
+            ),
+
+            messages=[
+
+                {
+                    "role": "user",
+
+                    "content":
+                    (
+                        f"""
+Assign the following field
+to exactly one business domain.
+
+Choose only one:
+
+Commercial
+Finance
+Customer
+Operations
+People
+Compliance
+
+Field:
+
+{field_name}
+"""
+                    )
+                }
+
+            ]
+
+        )
+    )
+
+    return (
+
+        response.choices[0]
+        .message.content
+        .strip()
+
+    )
