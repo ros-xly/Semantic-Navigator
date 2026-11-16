@@ -91,3 +91,51 @@ Field:
         .message.content
         .split(",")
     )
+
+def generate_domain(
+    field_name
+):
+
+    response = (
+        client.chat.completions.create(
+
+            model=os.getenv(
+                "AZURE_OPENAI_MODEL"
+            ),
+
+            messages=[
+
+                {
+                    "role": "user",
+
+                    "content":
+                    (
+                        f"""
+Assign this field to one domain.
+
+Choose one only:
+
+Commercial
+Finance
+Customer
+Operations
+People
+Compliance
+
+Field:
+
+{field_name}
+"""
+                    )
+                }
+
+            ]
+
+        )
+    )
+
+    return (
+        response.choices[0]
+        .message.content
+        .strip()
+    )
