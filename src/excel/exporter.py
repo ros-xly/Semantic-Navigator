@@ -6,7 +6,8 @@ from openpyxl import Workbook
 def create_data_dictionary(
     tables,
     lineage=None,
-    impact=None
+    impact=None,
+    ontology=None
 ):
 
     workbook = Workbook()
@@ -158,6 +159,33 @@ def create_data_dictionary(
                     )
                 ]
             )
+
+
+    #=====================================
+    # ONTOLOGY SHEET
+    #=====================================
+
+ontology_sheet = workbook.create_sheet(
+    "Ontology"
+)
+
+ontology_sheet.append(
+    [
+        "Domain",
+        "Concept",
+        "Source Type"
+    ]
+)
+
+for node in ontology:
+
+    ontology_sheet.append(
+        [
+            node.domain,
+            node.concept,
+            node.source_type
+        ]
+    )
 
     # =====================================
     # FORMAT COLUMNS

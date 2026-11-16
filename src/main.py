@@ -64,7 +64,8 @@ impact = build_impact_analysis(
 create_data_dictionary(
     tables,
     lineage,
-    impact
+    impact,
+    ontology
 )
 
 print(
