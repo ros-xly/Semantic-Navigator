@@ -1,6 +1,8 @@
 from ontology.node_generator import (
     generate_nodes
 )
+
+
 def build_ontology(
     tables
 ):

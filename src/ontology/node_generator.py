@@ -1,49 +1,37 @@
-from ontology.ontology_models import (
-    OntologyNode
-)
+from ontology.ontology_models import OntologyNode
+from ontology.domain_classifier import classify_domain
 
-from ontology.domain_classifier import (
-    classify_domain
-)
 
-def generate_nodes(
-    tables
-):
+def generate_nodes(tables):
+
     nodes = []
+
     for table in tables:
 
+        # Columns
         for column in table.columns:
 
             node = OntologyNode(
-
-                domain=
-                classify_domain(
+                domain=classify_domain(
                     column.name
                 ),
-
-                concept=
-                column.name,
-
+                concept=column.name,
                 source_type="Column"
             )
 
             nodes.append(node)
 
+        # Measures
         for measure in table.measures:
 
-        node = OntologyNode(
+            node = OntologyNode(
+                domain=classify_domain(
+                    measure.name
+                ),
+                concept=measure.name,
+                source_type="Measure"
+            )
 
-            domain=
-            classify_domain(
-                measure.name
-            ),
-
-            concept=
-            measure.name,
-
-            source_type="Measure"
-        )
-
-        nodes.append(node)
+            nodes.append(node)
 
     return nodes

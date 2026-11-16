@@ -1,14 +1,29 @@
 def print_ontology_summary(
     ontology
 ):
-    ONTOLOGY
 
-Commercial Performance
-    Revenue
-    Margin
+    print("\nONTOLOGY\n")
 
-Customer
-    Customer Count
+    domains = {}
 
-Finance
-    Cost
+    for node in ontology:
+
+        if node.domain not in domains:
+
+            domains[node.domain] = []
+
+        domains[node.domain].append(
+            node.concept
+        )
+
+    for domain, concepts in domains.items():
+
+        print(f"{domain}")
+
+        for concept in concepts:
+
+            print(
+                f"   - {concept}"
+            )
+
+        print()
