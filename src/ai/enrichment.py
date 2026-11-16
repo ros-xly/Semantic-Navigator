@@ -1,7 +1,11 @@
-from ai.mock_dictionary_ai import (
+from ai.azure_dictionary_ai import (
+
     generate_definition,
+
     generate_synonyms,
+
     generate_domain
+
 )
 
 def enrich_columns(tables):
