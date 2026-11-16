@@ -8,7 +8,10 @@ from ai.azure_dictionary_ai import (
 
 )
 
-def enrich_columns(tables):
+
+def enrich_columns(
+    tables
+):
 
     for table in tables:
 
@@ -33,4 +36,3 @@ def enrich_columns(tables):
             )
 
     return tables
-
