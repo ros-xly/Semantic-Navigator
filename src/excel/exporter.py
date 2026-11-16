@@ -5,6 +5,7 @@ from openpyxl import Workbook
 
 def create_data_dictionary(
     tables,
+    model_name,
     lineage=None,
     impact=None,
     ontology=None,
@@ -250,11 +251,11 @@ def create_data_dictionary(
             ].width = max_length + 4
 
     # =====================================
-    # SAVE
+    # SAVE FILE
     # =====================================
 
     output_file = Path(
-        r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\outputs\DataDictionary.xlsx"
+        rf"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\outputs\{model_name}_Documentation.xlsx"
     )
 
     workbook.save(
