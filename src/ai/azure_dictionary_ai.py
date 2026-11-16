@@ -50,3 +50,44 @@ for:
         response.choices[0]
         .message.content
     )
+
+def generate_synonyms(
+    field_name
+):
+
+    response = (
+        client.chat.completions.create(
+
+            model=os.getenv(
+                "AZURE_OPENAI_MODEL"
+            ),
+
+            messages=[
+
+                {
+                    "role": "user",
+
+                    "content":
+                    (
+                        f"""
+Provide three business synonyms.
+
+Return only comma-separated values.
+
+Field:
+
+{field_name}
+"""
+                    )
+                }
+
+            ]
+
+        )
+    )
+
+    return (
+        response.choices[0]
+        .message.content
+        .split(",")
+    )
