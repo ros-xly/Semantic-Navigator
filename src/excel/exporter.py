@@ -137,29 +137,27 @@ def create_data_dictionary(
     # ONTOLOGY
     # =====================================
 
-    if ontology:
+        if ontology:
 
-        ontology_sheet = workbook.create_sheet(
-            "Ontology"
-        )
-
-        ontology_sheet.append(
-            [
-                "Domain",
-                "Concept",
-                "Source Type"
-            ]
-        )
-
-        for node in ontology:
+            ontology_sheet = workbook.create_sheet(
+                "Ontology"
+            )
 
             ontology_sheet.append(
                 [
-                    node.domain,
-                    node.concept,
-                    node.source_type
+                    "Parent Concept",
+                    "Child Concept"
                 ]
             )
+
+            for parent, child in ontology:
+
+                ontology_sheet.append(
+                    [
+                        parent,
+                        child
+                    ]
+                )
 
     # =====================================
     # GOVERNANCE

@@ -117,7 +117,8 @@ try:
     )
 
     ontology = build_ontology(
-        tables
+        tables,
+        lineage
     )
 
     field_score = (
