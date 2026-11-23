@@ -75,34 +75,60 @@ def create_data_dictionary(
     # MEASURES
     # =====================================
 
-    measure_sheet = workbook.create_sheet(
+        measure_sheet = workbook.create_sheet(
         "Measures"
     )
 
     measure_sheet.append(
         [
             "Measure",
-            "Friendly Name",
             "Definition",
-            "Purpose",
-            "Dependencies"
+            "Type",
+            "Fields"
         ]
+    )
+
+    expanded_dependencies = {}
+
+    if lineage:
+
+        from measures.measure_dependency_expander import (
+            expand_measure_dependencies
+        )
+
+        expanded_dependencies = (
+            expand_measure_dependencies(
+                lineage
+            )
+        )
+
+    from ai.measure_classifier import (
+        classify_measure
     )
 
     for table in tables:
 
         for measure in table.measures:
 
+            measure_type = (
+                classify_measure(
+                    measure.expression
+                )
+            )
+
+            fields = ", ".join(
+                expanded_dependencies.get(
+                    measure.name,
+                    []
+                )
+            )
+
             measure_sheet.append(
                 [
                     measure.name,
-                    measure.friendly_name,
                     measure.definition,
-                    measure.purpose,
-                    dependency_map.get(
-                        measure.name,
-                        ""
-                    )
+                    measure_type,
+                    fields
                 ]
             )
 
