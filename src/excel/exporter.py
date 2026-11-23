@@ -134,34 +134,6 @@ def create_data_dictionary(
 
 
     # =====================================
-    # IMPACT ANALYSIS
-    # =====================================
-
-    if impact:
-
-        impact_sheet = workbook.create_sheet(
-            "Impact Analysis"
-        )
-
-        impact_sheet.append(
-            [
-                "Field",
-                "Used In"
-            ]
-        )
-
-        for field, measures in impact.items():
-
-            impact_sheet.append(
-                [
-                    field,
-                    ", ".join(
-                        measures
-                    )
-                ]
-            )
-
-    # =====================================
     # ONTOLOGY
     # =====================================
 
