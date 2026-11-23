@@ -22,27 +22,31 @@ def generate_definition(
                     "role": "system",
 
                     "content":
-                    (
-                        "You are a data governance specialist."
-                    )
+                    """
+You are creating a business glossary.
+
+Provide a plain-English business definition.
+
+Rules:
+
+- Do not repeat the field name
+- Do not start with:
+  'This field'
+  'The field'
+- Do not mention:
+  columns
+  tables
+  datasets
+  semantic models
+- Maximum 30 words
+"""
                 },
 
                 {
                     "role": "user",
 
                     "content":
-                    (
-                        f"""
-Provide a concise business definition
-for the following field.
-
-Field:
-
-{field_name}
-
-Return only the definition.
-"""
-                    )
+                    field_name
                 }
 
             ]
@@ -55,6 +59,7 @@ Return only the definition.
         .message.content
         .strip()
     )
+
 
 def generate_synonyms(
     field_name
@@ -73,8 +78,7 @@ def generate_synonyms(
                     "role": "user",
 
                     "content":
-                    (
-                        f"""
+                    f"""
 Provide three business synonyms.
 
 Return only comma-separated values.
@@ -83,7 +87,6 @@ Field:
 
 {field_name}
 """
-                    )
                 }
 
             ]
@@ -92,60 +95,7 @@ Field:
     )
 
     return (
-
         response.choices[0]
         .message.content
         .split(",")
-
-    )
-
-def generate_domain(
-    field_name
-):
-
-    response = (
-        client.chat.completions.create(
-
-            model=os.getenv(
-                "AZURE_OPENAI_MODEL"
-            ),
-
-            messages=[
-
-                {
-                    "role": "user",
-
-                    "content":
-                    (
-                        f"""
-Assign the following field
-to exactly one business domain.
-
-Choose only one:
-
-Commercial
-Finance
-Customer
-Operations
-People
-Compliance
-
-Field:
-
-{field_name}
-"""
-                    )
-                }
-
-            ]
-
-        )
-    )
-
-    return (
-
-        response.choices[0]
-        .message.content
-        .strip()
-
     )

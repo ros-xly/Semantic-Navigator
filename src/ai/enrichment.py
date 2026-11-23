@@ -2,9 +2,7 @@ from ai.azure_dictionary_ai import (
 
     generate_definition,
 
-    generate_synonyms,
-
-    generate_domain
+    generate_synonyms
 
 )
 
@@ -25,12 +23,6 @@ def enrich_columns(
 
             column.synonyms = (
                 generate_synonyms(
-                    column.name
-                )
-            )
-
-            column.business_domain = (
-                generate_domain(
                     column.name
                 )
             )
