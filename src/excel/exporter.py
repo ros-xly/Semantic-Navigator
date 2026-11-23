@@ -132,33 +132,6 @@ def create_data_dictionary(
                 ]
             )
 
-    # =====================================
-    # LINEAGE
-    # =====================================
-
-    if lineage:
-
-        lineage_sheet = workbook.create_sheet(
-            "Lineage"
-        )
-
-        lineage_sheet.append(
-            [
-                "Measure",
-                "Dependencies"
-            ]
-        )
-
-        for item in lineage:
-
-            lineage_sheet.append(
-                [
-                    item["measure"],
-                    ", ".join(
-                        item["dependencies"]
-                    )
-                ]
-            )
 
     # =====================================
     # IMPACT ANALYSIS
