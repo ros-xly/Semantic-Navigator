@@ -4,26 +4,16 @@ def print_ontology_summary(
 
     print("\nONTOLOGY\n")
 
-    domains = {}
+    if not ontology:
 
-    for node in ontology:
-
-        if node.domain not in domains:
-
-            domains[node.domain] = []
-
-        domains[node.domain].append(
-            node.concept
+        print(
+            "No ontology generated."
         )
 
-    for domain, concepts in domains.items():
+        return
 
-        print(f"{domain}")
+    for item in ontology:
 
-        for concept in concepts:
-
-            print(
-                f"   - {concept}"
-            )
-
-        print()
+        print(
+            item
+        )

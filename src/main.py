@@ -165,9 +165,9 @@ try:
         ontology
     )
 
-    score_ontology(
-        ontology
-    )
+    #score_ontology(
+        #ontology
+    #)
 
     print_governance_report(
         field_score,
@@ -179,9 +179,8 @@ try:
     create_data_dictionary(
         tables,
         model_name,
-        lineage,
-        impact,
         ontology,
+        None,
         governance_summary
     )
 

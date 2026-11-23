@@ -18,6 +18,10 @@ def build_ontology(
         )
     )
 
-    return build_concept_tree(
-        expanded_dependencies
+    ontology = (
+        build_concept_tree(
+            expanded_dependencies
+        )
     )
+
+    return ontology

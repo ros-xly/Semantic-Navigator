@@ -37,11 +37,10 @@ def create_data_dictionary(
 
             synonyms = ""
 
-            if getattr(
+            if hasattr(
                 column,
-                "synonyms",
-                None
-            ):
+                "synonyms"
+            ) and column.synonyms:
 
                 synonyms = ", ".join(
                     column.synonyms
@@ -78,16 +77,16 @@ def create_data_dictionary(
         ]
     )
 
+    from lineage.lineage_builder import (
+        build_lineage
+    )
+
     from measures.measure_dependency_expander import (
         expand_measure_dependencies
     )
 
     from ai.measure_classifier import (
         classify_measure
-    )
-
-    from lineage.lineage_builder import (
-        build_lineage
     )
 
     lineage = build_lineage(
@@ -136,31 +135,23 @@ def create_data_dictionary(
 
     if ontology:
 
-        ontology_sheet = (
-            workbook.create_sheet(
-                "Business Ontology"
-            )
+        ontology_sheet = workbook.create_sheet(
+            "Business Ontology"
         )
 
         ontology_sheet.append(
             [
-                "Entity",
-                "Relationship",
-                "Related Entity"
+                "Parent Concept",
+                "Child Concept"
             ]
         )
 
-        for (
-            entity,
-            relationship,
-            related
-        ) in ontology:
+        for parent, child in ontology:
 
             ontology_sheet.append(
                 [
-                    entity,
-                    relationship,
-                    related
+                    parent,
+                    child
                 ]
             )
 
@@ -182,11 +173,11 @@ def create_data_dictionary(
             ]
         )
 
-        for table in unclassified:
+        for table_name in unclassified:
 
             unclassified_sheet.append(
                 [
-                    table
+                    table_name
                 ]
             )
 
@@ -209,10 +200,7 @@ def create_data_dictionary(
             ]
         )
 
-        for (
-            metric,
-            score
-        ) in governance_summary:
+        for metric, score in governance_summary:
 
             governance_sheet.append(
                 [
@@ -267,8 +255,14 @@ def create_data_dictionary(
     # SAVE
     # =====================================
 
+    from datetime import datetime
+
+    timestamp = datetime.now().strftime(
+        "%Y-%m-%d_%H-%M-%S"
+    )
+
     output_file = Path(
-        rf"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\outputs\{model_name}_Documentation.xlsx"
+        rf"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\outputs\{model_name}_Documentation_{timestamp}.xlsx"
     )
 
     workbook.save(

@@ -3,6 +3,8 @@ def get_model_name(
 ):
 
     return (
-        model_path.parent
+        model_path
+        .parent
+        .parent
         .name
     )
