@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from datetime import datetime
+
 from openpyxl import Workbook
 
 
@@ -7,6 +9,7 @@ def create_data_dictionary(
     tables,
     model_name,
     ontology=None,
+    process_flow=None,
     unclassified=None,
     governance_summary=None
 ):
@@ -133,51 +136,66 @@ def create_data_dictionary(
     # BUSINESS ONTOLOGY
     # =====================================
 
-        if ontology:
+    if ontology:
 
-            ontology_sheet = workbook.create_sheet(
-                "Business Ontology"
-            )
+        ontology_sheet = workbook.create_sheet(
+            "Business Ontology"
+        )
 
-            ontology_sheet.append(
-                [
-                    "Domain",
-                    "Capability",
-                    "Process",
-                    "Table"
-                ]
-            )
+        ontology_sheet.append(
+            [
+                "Process",
+                "Table"
+            ]
+        )
 
-            for item in ontology:
+        for process, tables_in_process in (
+
+            ontology.items()
+
+        ):
+
+            for table_name in (
+
+                tables_in_process
+
+            ):
 
                 ontology_sheet.append(
                     [
-                        item.domain,
-                        item.capability,
-                        item.process,
-                        item.table
+                        process,
+                        table_name
                     ]
                 )
 
-            if unclassified:
+    # =====================================
+    # PROCESS FLOW
+    # =====================================
 
-                sheet = workbook.create_sheet(
-                    "Unclassified"
-                )
+    if process_flow:
 
-                sheet.append(
-                    [
-                        "Table"
-                    ]
-                )
+        flow_sheet = workbook.create_sheet(
+            "Process Flow"
+        )
 
-                for table_name in unclassified:
+        flow_sheet.append(
+            [
+                "Source Process",
+                "Relationship",
+                "Target Process"
+            ]
+        )
 
-                    sheet.append(
-                        [
-                            table_name
-                        ]
-                    )
+        for item in process_flow:
+
+            flow_sheet.append(
+                [
+                    item["source"],
+                    item["relationship"],
+                    item["target"]
+                ]
+            )
+
     # =====================================
     # UNCLASSIFIED
     # =====================================
@@ -196,7 +214,13 @@ def create_data_dictionary(
             ]
         )
 
-        for table_name in unclassified:
+        for table_name in sorted(
+            list(
+                set(
+                    unclassified
+                )
+            )
+        ):
 
             unclassified_sheet.append(
                 [
@@ -233,7 +257,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # AUTO SIZE COLUMNS
+    # AUTO SIZE
     # =====================================
 
     for sheet in workbook.worksheets:
@@ -251,17 +275,15 @@ def create_data_dictionary(
 
                 try:
 
-                    value_length = len(
-                        str(cell.value)
-                    )
+                    if cell.value:
 
-                    if (
-                        value_length
-                        > max_length
-                    ):
-
-                        max_length = (
-                            value_length
+                        max_length = max(
+                            max_length,
+                            len(
+                                str(
+                                    cell.value
+                                )
+                            )
                         )
 
                 except Exception:
@@ -277,8 +299,6 @@ def create_data_dictionary(
     # =====================================
     # SAVE
     # =====================================
-
-    from datetime import datetime
 
     timestamp = datetime.now().strftime(
         "%Y-%m-%d_%H-%M-%S"

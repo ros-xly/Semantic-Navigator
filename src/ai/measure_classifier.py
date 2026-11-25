@@ -2,21 +2,70 @@ def classify_measure(
     expression
 ):
 
-    expression = expression.lower()
+    expression = (
+        expression.lower()
+    )
 
-    if "count" in expression:
+    if (
+        "distinctcount"
+        in expression
+    ):
 
         return "Count"
 
-    if "sum" in expression:
+    if (
+        "count("
+        in expression
+    ):
+
+        return "Count"
+
+    if (
+        "sumx("
+        in expression
+    ):
 
         return "Sum"
 
-    if "%" in expression:
+    if (
+        "sum("
+        in expression
+    ):
+
+        return "Sum"
+
+    if (
+        "averagex("
+        in expression
+    ):
+
+        return "Average"
+
+    if (
+        "average("
+        in expression
+    ):
+
+        return "Average"
+
+    if (
+        "divide("
+        in expression
+    ):
 
         return "Percentage"
 
-    if "/" in expression:
+    if (
+        "%"
+        in expression
+    ):
+
+        return "Percentage"
+
+    if (
+        "/"
+        in expression
+    ):
 
         return "Ratio"
 

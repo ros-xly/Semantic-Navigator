@@ -3,16 +3,21 @@ def print_ontology_summary(
 ):
 
     print(
-        "\nBUSINESS ARCHITECTURE\n"
+        "\nBUSINESS ONTOLOGY\n"
     )
 
-    for item in ontology:
+    for process, tables in (
+
+        ontology.items()
+
+    ):
 
         print(
-
-            f"{item.domain} | "
-            f"{item.capability} | "
-            f"{item.process} | "
-            f"{item.table}"
-
+            f"\n{process}"
         )
+
+        for table in tables:
+
+            print(
+                f"  - {table}"
+            )

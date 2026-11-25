@@ -1,5 +1,5 @@
-import os
 import json
+import os
 
 from ai.azure_client import (
     client
@@ -10,13 +10,21 @@ def discover_processes(
     tables
 ):
 
-    table_names = [
+    table_names = sorted(
 
-        table.name
+        [
+            table.name
 
-        for table in tables
+            for table in tables
 
-    ]
+            if not (
+                table.name.startswith(
+                    "LocalDateTable"
+                )
+            )
+        ]
+
+    )
 
     response = (
         client.chat.completions.create(
@@ -34,37 +42,35 @@ def discover_processes(
                     """
 You are an enterprise architect.
 
-Review the table names.
+Analyse ALL table names together.
 
-Identify:
+Do NOT classify tables individually.
 
-Domain
+Create business process groups.
 
-Capability
-
-Process
-
-Table
-
-Return JSON array.
+Return ONLY JSON.
 
 Example:
 
-[
-    {
-        "domain":
-            "Procurement",
+{
+    "Supplier Management":
+    [
+        "Supplier",
+        "SupplierContact"
+    ],
 
-        "capability":
-            "Purchase To Pay",
+    "Purchase Ordering":
+    [
+        "PurchaseOrder",
+        "PurchaseOrderLine"
+    ],
 
-        "process":
-            "Invoice Processing",
-
-        "table":
-            "Invoice"
-    }
-]
+    "Invoice Processing":
+    [
+        "Invoice",
+        "InvoiceLine"
+    ]
+}
 """
                 },
 
@@ -84,7 +90,33 @@ Example:
         )
     )
 
-    return (
+    result = (
         response.choices[0]
         .message.content
     )
+
+    result = (
+        result
+        .replace(
+            "```json",
+            ""
+        )
+        .replace(
+            "```",
+            ""
+        )
+        .strip()
+    )
+
+    try:
+
+        return json.loads(
+            result
+        )
+
+    except Exception:
+
+        return {
+            "Unknown":
+            table_names
+        }

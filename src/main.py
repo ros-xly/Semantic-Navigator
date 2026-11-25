@@ -68,16 +68,16 @@ from ontology.ontology_builder import (
     build_ontology
 )
 
+from ontology.ontology_flow import (
+    build_process_flow
+)
+
 from ontology.unclassified import (
     find_unclassified
 )
 
 from ontology.ontology_report import (
     print_ontology_summary
-)
-
-from ontology.ontology_scoring import (
-    score_ontology
 )
 
 # =====================================
@@ -109,7 +109,7 @@ from governance.governance_builder import (
 )
 
 # =====================================
-# EXCEL
+# EXPORT
 # =====================================
 
 from excel.exporter import (
@@ -122,10 +122,6 @@ from excel.exporter import (
 
 try:
 
-    # -------------------------
-    # MODEL INPUT
-    # -------------------------
-
     model_path = get_model_path()
 
     validate_model_path(
@@ -136,17 +132,17 @@ try:
         model_path
     )
 
-    # -------------------------
-    # MODEL PARSE
-    # -------------------------
+    # --------------------
+    # Parse Model
+    # --------------------
 
     tables = parse_model_folder(
         str(model_path)
     )
 
-    # -------------------------
-    # AI ENRICHMENT
-    # -------------------------
+    # --------------------
+    # AI Enrichment
+    # --------------------
 
     tables = enrich_columns(
         tables
@@ -156,21 +152,27 @@ try:
         tables
     )
 
-    # -------------------------
-    # LINEAGE
-    # -------------------------
+    # --------------------
+    # Dependencies
+    # --------------------
 
     lineage = build_lineage(
         tables
     )
 
-    # -------------------------
-    # BUSINESS ONTOLOGY
-    # -------------------------
+    # --------------------
+    # Business Ontology
+    # --------------------
 
     ontology = build_ontology(
         tables,
         lineage
+    )
+
+    process_flow = (
+        build_process_flow(
+            ontology
+        )
     )
 
     unclassified = (
@@ -180,9 +182,9 @@ try:
         )
     )
 
-    # -------------------------
-    # GOVERNANCE
-    # -------------------------
+    # --------------------
+    # Governance
+    # --------------------
 
     field_score = (
         score_field_coverage(
@@ -219,9 +221,9 @@ try:
         )
     )
 
-    # -------------------------
-    # CONSOLE REPORTING
-    # -------------------------
+    # --------------------
+    # Console Output
+    # --------------------
 
     print_processing_report(
         model_name,
@@ -232,10 +234,6 @@ try:
         ontology
     )
 
-    score_ontology(
-        ontology
-    )
-
     print_governance_report(
         field_score,
         measure_score,
@@ -243,14 +241,15 @@ try:
         health_score
     )
 
-    # -------------------------
-    # EXCEL EXPORT
-    # -------------------------
+    # --------------------
+    # Export Workbook
+    # --------------------
 
     create_data_dictionary(
         tables,
         model_name,
         ontology,
+        process_flow,
         unclassified,
         governance_summary
     )

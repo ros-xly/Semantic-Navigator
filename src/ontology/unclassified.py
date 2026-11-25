@@ -5,19 +5,35 @@ def find_unclassified(
 
     classified = set()
 
-    for item in ontology:
+    for process, process_tables in (
 
-        classified.add(
-            item.table
+        ontology.items()
+
+    ):
+
+        for table in process_tables:
+
+            classified.add(
+                table
+            )
+
+    unclassified = []
+
+    for table in tables:
+
+        if (
+            table.name
+            not in classified
+        ):
+
+            unclassified.append(
+                table.name
+            )
+
+    return sorted(
+        list(
+            set(
+                unclassified
+            )
         )
-
-    return [
-
-        table.name
-
-        for table in tables
-
-        if table.name
-        not in classified
-
-    ]
+    )
