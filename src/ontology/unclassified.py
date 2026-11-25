@@ -3,26 +3,21 @@ def find_unclassified(
     ontology
 ):
 
-    linked = set()
+    classified = set()
 
-    for source, _, target in ontology:
+    for item in ontology:
 
-        linked.add(
-            source
+        classified.add(
+            item.table
         )
 
-        linked.add(
-            target
-        )
+    return [
 
-    unclassified = []
+        table.name
 
-    for table in tables:
+        for table in tables
 
-        if table.name not in linked:
+        if table.name
+        not in classified
 
-            unclassified.append(
-                table.name
-            )
-
-    return unclassified
+    ]
