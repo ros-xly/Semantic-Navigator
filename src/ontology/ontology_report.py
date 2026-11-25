@@ -12,8 +12,8 @@ def print_ontology_summary(
 
         return
 
-    for item in ontology:
+    for parent, child in ontology:
 
         print(
-            item
+            f"{parent} -> {child}"
         )
