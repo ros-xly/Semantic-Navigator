@@ -2,18 +2,17 @@ def print_ontology_summary(
     ontology
 ):
 
-    print("\nONTOLOGY\n")
+    print(
+        "\nBUSINESS ARCHITECTURE\n"
+    )
 
-    if not ontology:
-
-        print(
-            "No ontology generated."
-        )
-
-        return
-
-    for parent, child in ontology:
+    for item in ontology:
 
         print(
-            f"{parent} -> {child}"
+
+            f"{item.domain} | "
+            f"{item.capability} | "
+            f"{item.process} | "
+            f"{item.table}"
+
         )
