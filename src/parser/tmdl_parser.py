@@ -1,64 +1,176 @@
-from pathlib import Path
+from src.parser.models import (
+    Column,
+    Measure,
+    Table
+)
 
-from src.parser.models import Column, Measure, Table
 
-def parse_tmdl_file(file_path: str) -> Table:
-    
-    with open(file_path, "r", encoding="utf-8") as file:
+def parse_tmdl_file(
+    file_path: str
+) -> Table:
+
+    with open(
+        file_path,
+        "r",
+        encoding="utf-8"
+    ) as file:
+
         lines = file.readlines()
 
     table_name = ""
+
     columns = []
+
     measures = []
 
     current_column = None
 
-    for index, line in enumerate(lines):
+    index = 0
 
-        stripped = line.strip()
+    while index < len(lines):
 
-        if stripped.startswith("table "):
-            table_name = stripped.replace("table ", "").strip()
+        stripped = lines[
+            index
+        ].strip()
 
-        elif stripped.startswith("column "):
-            column_name = stripped.replace("column ", "").strip()
+        # =====================
+        # TABLE
+        # =====================
 
-            current_column = Column(
-                name=column_name,
-                data_type=""
-            )
+        if stripped.startswith(
+            "table "
+        ):
 
-            columns.append(current_column)
-
-        elif stripped.startswith("dataType:"):
-
-            if current_column:
-                current_column.data_type = (
-                    stripped.replace("dataType:", "").strip()
+            table_name = (
+                stripped
+                .replace(
+                    "table ",
+                    ""
                 )
-
-        elif stripped.startswith("measure "):
-
-            measure_name = (
-                stripped.replace("measure ", "")
-                .split("=")[0]
                 .strip()
             )
 
-            expression = ""
+        # =====================
+        # COLUMN
+        # =====================
 
-            if index + 1 < len(lines):
-                expression = lines[index + 1].strip()
+        elif stripped.startswith(
+            "column "
+        ):
 
-            measures.append(
-                Measure(
-                    name=measure_name,
-                    expression = expression
+            column_name = (
+                stripped
+                .replace(
+                    "column ",
+                    ""
                 )
+                .strip()
             )
 
+            current_column = Column(
+
+                name=column_name,
+
+                data_type=""
+
+            )
+
+            columns.append(
+                current_column
+            )
+
+        elif stripped.startswith(
+            "dataType:"
+        ):
+
+            if current_column:
+
+                current_column.data_type = (
+
+                    stripped.replace(
+                        "dataType:",
+                        ""
+                    ).strip()
+
+                )
+
+        # =====================
+        # MEASURE
+        # =====================
+
+        elif stripped.startswith(
+            "measure "
+        ):
+
+            measure_name = (
+
+                stripped.replace(
+                    "measure ",
+                    ""
+                )
+                .split("=")[0]
+                .strip()
+
+            )
+
+            expression_lines = []
+
+            next_index = (
+                index + 1
+            )
+
+            while (
+
+                next_index < len(lines)
+
+                and not lines[
+                    next_index
+                ].strip().startswith(
+                    "measure "
+                )
+
+                and not lines[
+                    next_index
+                ].strip().startswith(
+                    "column "
+                )
+
+            ):
+
+                expression_lines.append(
+
+                    lines[
+                        next_index
+                    ].rstrip()
+
+                )
+
+                next_index += 1
+
+            expression = "\n".join(
+                expression_lines
+            )
+
+            measures.append(
+
+                Measure(
+
+                    name=measure_name,
+
+                    expression=expression
+
+                )
+
+            )
+
+        index += 1
+
     return Table(
+
         name=table_name,
+
         columns=columns,
+
         measures=measures
+
     )
