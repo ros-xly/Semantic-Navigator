@@ -1,3 +1,6 @@
+import traceback
+
+
 def handle_error(
     error
 ):
@@ -9,3 +12,9 @@ def handle_error(
     print(
         str(error)
     )
+
+    print(
+        "\nFULL TRACEBACK\n"
+    )
+
+    traceback.print_exc()

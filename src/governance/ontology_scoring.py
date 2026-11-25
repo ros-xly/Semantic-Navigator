@@ -2,26 +2,18 @@ def score_ontology_coverage(
     ontology
 ):
 
-    total = len(
-        ontology
-    )
-
-    classified = 0
-
-    for node in ontology:
-
-        if node.domain != "General":
-
-            classified += 1
-
-    if total == 0:
+    if not ontology:
 
         return 0
 
-    return round(
-        (
-            classified
-            / total
-        ) * 100,
-        2
-    )
+    classified_tables = 0
+
+    for process, tables in (
+        ontology.items()
+    ):
+
+        classified_tables += len(
+            tables
+        )
+
+    return classified_tables

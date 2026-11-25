@@ -1,14 +1,19 @@
-def score_ontology(
+def score_ontology_coverage(
     ontology
 ):
 
-    print(
-        "\nONTOLOGY SCORE\n"
-    )
+    if not ontology:
 
-    print(
+        return 0
 
-        f"Tables Classified: "
-        f"{len(ontology)}"
+    classified_tables = 0
 
-    )
+    for process, tables in (
+        ontology.items()
+    ):
+
+        classified_tables += len(
+            tables
+        )
+
+    return classified_tables
