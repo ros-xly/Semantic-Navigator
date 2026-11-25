@@ -133,28 +133,51 @@ def create_data_dictionary(
     # BUSINESS ONTOLOGY
     # =====================================
 
-    if ontology:
+        if ontology:
 
-        ontology_sheet = workbook.create_sheet(
-            "Business Ontology"
-        )
-
-        ontology_sheet.append(
-            [
-                "Parent Concept",
-                "Child Concept"
-            ]
-        )
-
-        for parent, child in ontology:
+            ontology_sheet = workbook.create_sheet(
+                "Business Ontology"
+            )
 
             ontology_sheet.append(
                 [
-                    parent,
-                    child
+                    "Domain",
+                    "Capability",
+                    "Process",
+                    "Table"
                 ]
             )
 
+            for item in ontology:
+
+                ontology_sheet.append(
+                    [
+                        item.domain,
+                        item.capability,
+                        item.process,
+                        item.table
+                    ]
+                )
+
+            if unclassified:
+
+                sheet = workbook.create_sheet(
+                    "Unclassified"
+                )
+
+                sheet.append(
+                    [
+                        "Table"
+                    ]
+                )
+
+                for table_name in unclassified:
+
+                    sheet.append(
+                        [
+                            table_name
+                        ]
+                    )
     # =====================================
     # UNCLASSIFIED
     # =====================================

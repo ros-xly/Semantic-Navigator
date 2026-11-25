@@ -4,9 +4,45 @@ sys.path.append(
     r"C:\Users\ros.crossley\OneDrive - MMCG\Documents\Github Projects\Semantic-Navigator\src"
 )
 
+# =====================================
+# PARSER
+# =====================================
+
 from parser.model_parser import (
     parse_model_folder
 )
+
+# =====================================
+# INPUT
+# =====================================
+
+from input.model_input import (
+    get_model_path
+)
+
+from input.model_validation import (
+    validate_model_path
+)
+
+from input.model_metadata import (
+    get_model_name
+)
+
+from input.error_handler import (
+    handle_error
+)
+
+# =====================================
+# REPORTING
+# =====================================
+
+from reporting.process_report import (
+    print_processing_report
+)
+
+# =====================================
+# AI ENRICHMENT
+# =====================================
 
 from ai.enrichment import (
     enrich_columns
@@ -16,16 +52,24 @@ from ai.measure_enrichment import (
     enrich_measures
 )
 
+# =====================================
+# LINEAGE
+# =====================================
+
 from lineage.lineage_builder import (
     build_lineage
 )
 
-from lineage.impact_analysis import (
-    build_impact_analysis
-)
+# =====================================
+# BUSINESS ONTOLOGY
+# =====================================
 
 from ontology.ontology_builder import (
     build_ontology
+)
+
+from ontology.unclassified import (
+    find_unclassified
 )
 
 from ontology.ontology_report import (
@@ -35,6 +79,10 @@ from ontology.ontology_report import (
 from ontology.ontology_scoring import (
     score_ontology
 )
+
+# =====================================
+# GOVERNANCE
+# =====================================
 
 from governance.coverage_scoring import (
     score_field_coverage
@@ -60,31 +108,23 @@ from governance.governance_builder import (
     build_governance_summary
 )
 
+# =====================================
+# EXCEL
+# =====================================
+
 from excel.exporter import (
     create_data_dictionary
 )
 
-from input.model_input import (
-    get_model_path
-)
-
-from input.model_validation import (
-    validate_model_path
-)
-
-from input.model_metadata import (
-    get_model_name
-)
-
-from input.error_handler import (
-    handle_error
-)
-
-from reporting.process_report import (
-    print_processing_report
-)
+# =====================================
+# MAIN
+# =====================================
 
 try:
+
+    # -------------------------
+    # MODEL INPUT
+    # -------------------------
 
     model_path = get_model_path()
 
@@ -96,9 +136,17 @@ try:
         model_path
     )
 
+    # -------------------------
+    # MODEL PARSE
+    # -------------------------
+
     tables = parse_model_folder(
         str(model_path)
     )
+
+    # -------------------------
+    # AI ENRICHMENT
+    # -------------------------
 
     tables = enrich_columns(
         tables
@@ -108,18 +156,33 @@ try:
         tables
     )
 
+    # -------------------------
+    # LINEAGE
+    # -------------------------
+
     lineage = build_lineage(
         tables
     )
 
-    impact = build_impact_analysis(
-        lineage
-    )
+    # -------------------------
+    # BUSINESS ONTOLOGY
+    # -------------------------
 
     ontology = build_ontology(
         tables,
         lineage
     )
+
+    unclassified = (
+        find_unclassified(
+            tables,
+            ontology
+        )
+    )
+
+    # -------------------------
+    # GOVERNANCE
+    # -------------------------
 
     field_score = (
         score_field_coverage(
@@ -156,6 +219,10 @@ try:
         )
     )
 
+    # -------------------------
+    # CONSOLE REPORTING
+    # -------------------------
+
     print_processing_report(
         model_name,
         tables
@@ -165,9 +232,9 @@ try:
         ontology
     )
 
-    #score_ontology(
-        #ontology
-    #)
+    score_ontology(
+        ontology
+    )
 
     print_governance_report(
         field_score,
@@ -176,12 +243,20 @@ try:
         health_score
     )
 
+    # -------------------------
+    # EXCEL EXPORT
+    # -------------------------
+
     create_data_dictionary(
         tables,
         model_name,
         ontology,
-        None,
+        unclassified,
         governance_summary
+    )
+
+    print(
+        "\nDocumentation Complete"
     )
 
 except Exception as error:
