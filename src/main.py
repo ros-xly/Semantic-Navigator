@@ -12,12 +12,6 @@ from parser.model_parser import (
     parse_model_folder
 )
 
-relationships = (
-    parse_relationships(
-        model_path
-    )
-)
-
 # =====================================
 # INPUT
 # =====================================
@@ -36,10 +30,6 @@ from input.model_metadata import (
 
 from input.error_handler import (
     handle_error
-)
-
-from ontology.relationship_parser import (
-    parse_relationships
 )
 
 from ontology.business_relationship_builder import (
