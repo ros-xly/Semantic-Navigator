@@ -2,20 +2,17 @@ from pathlib import Path
 
 
 def parse_relationships(
-    model_folder
+    model_path
 ):
 
     relationships = []
 
     relationship_file = (
-        Path(model_folder)
-        .parent
+        Path(
+            model_path
+        ).parent
         / "relationships.tmdl"
     )
-
-    if not relationship_file.exists():
-
-        return relationships
 
     with open(
         relationship_file,
@@ -24,43 +21,41 @@ def parse_relationships(
 
         lines = file.readlines()
 
-    from_table = None
+    source = None
 
-    to_table = None
+    target = None
 
     for line in lines:
 
         stripped = line.strip()
 
-        if "fromTable:" in stripped:
+        if stripped.startswith(
+            "fromColumn:"
+        ):
 
-            from_table = (
-                stripped
-                .replace(
-                    "fromTable:",
+            source = (
+                stripped.replace(
+                    "fromColumn:",
                     ""
-                )
-                .strip()
+                ).strip()
             )
 
-        if "toTable:" in stripped:
+        elif stripped.startswith(
+            "toColumn:"
+        ):
 
-            to_table = (
-                stripped
-                .replace(
-                    "toTable:",
+            target = (
+                stripped.replace(
+                    "toColumn:",
                     ""
-                )
-                .strip()
+                ).strip()
             )
 
             relationships.append(
-
                 (
-                    from_table,
-                    to_table
+                    source,
+                    target
                 )
-
             )
 
     return relationships

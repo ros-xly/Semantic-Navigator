@@ -257,6 +257,49 @@ def create_data_dictionary(
             )
 
     # =====================================
+    # Entity Relationships
+    # =====================================
+
+    if entity_relationships:
+
+        entity_relationships = (
+            workbook.create_sheet(
+                "Relationships"
+            )
+        )
+
+        entity_relationships.append(
+            [
+                "Source Entity",
+                "Relationship",
+                "Target Entity"
+            ]
+        )
+
+    # =====================================
+    # MetaData
+    # =====================================
+
+    if relationship_metadata:
+
+        relationship_metadata = (
+            workbook.create_sheet(
+                "MetaData"
+            )
+        )
+
+        entity_relationships.append(
+            [
+                "Source Table",
+                "Source Column",
+                "Relationship",
+                "Target Table",
+                "Target Column",
+                "Description"
+            ]
+        )
+
+    # =====================================
     # AUTO SIZE
     # =====================================
 
