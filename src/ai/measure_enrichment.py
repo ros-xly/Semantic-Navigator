@@ -1,8 +1,13 @@
-from ai.mock_measure_ai import (
+from ai.azure_measure_ai import (
+
     generate_measure_definition,
+
     generate_measure_purpose,
+
     generate_friendly_name
+
 )
+
 
 def enrich_measures(
     tables
@@ -31,4 +36,3 @@ def enrich_measures(
             )
 
     return tables
-
