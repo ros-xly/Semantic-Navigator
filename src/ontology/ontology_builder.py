@@ -1,27 +1,25 @@
-from measures.measure_dependency_expander import (
-    expand_measure_dependencies
+from ontology.process_mapper import (
+    discover_processes
 )
 
-from ontology.concept_builder import (
-    build_concept_tree
+from ontology.process_parser import (
+    parse_process_response
 )
 
 
 def build_ontology(
     tables,
-    lineage
+    lineage=None
 ):
 
-    expanded_dependencies = (
-        expand_measure_dependencies(
-            lineage
+    response = (
+        discover_processes(
+            tables
         )
     )
 
-    ontology = (
-        build_concept_tree(
-            expanded_dependencies
+    return (
+        parse_process_response(
+            response
         )
     )
-
-    return ontology
