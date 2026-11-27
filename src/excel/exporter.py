@@ -8,9 +8,7 @@ from openpyxl import Workbook
 def create_data_dictionary(
     tables,
     model_name,
-    ontology=None,
-    process_flow=None,
-    unclassified=None,
+    relationships=None,
     governance_summary=None
 ):
 
@@ -113,10 +111,12 @@ def create_data_dictionary(
             )
 
             fields = ", ".join(
+
                 expanded_dependencies.get(
                     measure.name,
                     []
                 )
+
             )
 
             measure_sheet.append(
@@ -133,98 +133,70 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # BUSINESS ONTOLOGY
+    # ENTITY RELATIONSHIPS
     # =====================================
 
-    if ontology:
+    if relationships:
 
-        ontology_sheet = workbook.create_sheet(
-            "Business Ontology"
+        sheet = workbook.create_sheet(
+            "Entity Relationships"
         )
 
-        ontology_sheet.append(
+        sheet.append(
             [
-                "Process",
-                "Table"
-            ]
-        )
-
-        for process, tables_in_process in (
-
-            ontology.items()
-
-        ):
-
-            for table_name in (
-
-                tables_in_process
-
-            ):
-
-                ontology_sheet.append(
-                    [
-                        process,
-                        table_name
-                    ]
-                )
-
-    # =====================================
-    # PROCESS FLOW
-    # =====================================
-
-    if process_flow:
-
-        flow_sheet = workbook.create_sheet(
-            "Process Flow"
-        )
-
-        flow_sheet.append(
-            [
-                "Source Process",
+                "Source Entity",
+                "Source Table",
+                "Source Field",
                 "Relationship",
-                "Target Process"
+                "Target Entity",
+                "Target Table",
+                "Target Field"
             ]
         )
 
-        for item in process_flow:
+        for relationship in relationships:
 
-            flow_sheet.append(
+            sheet.append(
                 [
-                    item["source"],
-                    item["relationship"],
-                    item["target"]
+                    relationship.source_entity,
+                    relationship.source_table,
+                    relationship.source_column,
+                    relationship.relationship,
+                    relationship.target_entity,
+                    relationship.target_table,
+                    relationship.target_column
                 ]
             )
 
     # =====================================
-    # UNCLASSIFIED
+    # RELATIONSHIP METADATA
     # =====================================
 
-    if unclassified:
+    if relationships:
 
-        unclassified_sheet = (
-            workbook.create_sheet(
-                "Unclassified"
-            )
+        sheet = workbook.create_sheet(
+            "Relationship Metadata"
         )
 
-        unclassified_sheet.append(
+        sheet.append(
             [
-                "Table"
+                "Source Table",
+                "Source Column",
+                "Target Table",
+                "Target Column",
+                "Description"
             ]
         )
 
-        for table_name in sorted(
-            list(
-                set(
-                    unclassified
-                )
-            )
-        ):
+        for relationship in relationships:
 
-            unclassified_sheet.append(
+            sheet.append(
                 [
-                    table_name
+                    relationship.source_table,
+                    relationship.source_column,
+                    relationship.target_table,
+                    relationship.target_column,
+                    relationship.description
                 ]
             )
 
@@ -234,13 +206,11 @@ def create_data_dictionary(
 
     if governance_summary:
 
-        governance_sheet = (
-            workbook.create_sheet(
-                "Governance"
-            )
+        sheet = workbook.create_sheet(
+            "Governance"
         )
 
-        governance_sheet.append(
+        sheet.append(
             [
                 "Metric",
                 "Score"
@@ -249,7 +219,7 @@ def create_data_dictionary(
 
         for metric, score in governance_summary:
 
-            governance_sheet.append(
+            sheet.append(
                 [
                     metric,
                     score
@@ -257,50 +227,7 @@ def create_data_dictionary(
             )
 
     # =====================================
-    # Entity Relationships
-    # =====================================
-
-    if entity_relationships:
-
-        entity_relationships = (
-            workbook.create_sheet(
-                "Relationships"
-            )
-        )
-
-        entity_relationships.append(
-            [
-                "Source Entity",
-                "Relationship",
-                "Target Entity"
-            ]
-        )
-
-    # =====================================
-    # MetaData
-    # =====================================
-
-    if relationship_metadata:
-
-        relationship_metadata = (
-            workbook.create_sheet(
-                "MetaData"
-            )
-        )
-
-        entity_relationships.append(
-            [
-                "Source Table",
-                "Source Column",
-                "Relationship",
-                "Target Table",
-                "Target Column",
-                "Description"
-            ]
-        )
-
-    # =====================================
-    # AUTO SIZE
+    # FORMAT
     # =====================================
 
     for sheet in workbook.worksheets:
@@ -356,5 +283,5 @@ def create_data_dictionary(
     )
 
     print(
-        f"Workbook saved to: {output_file}"
+        f"\nWorkbook saved to:\n{output_file}"
     )

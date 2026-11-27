@@ -32,19 +32,6 @@ from input.error_handler import (
     handle_error
 )
 
-from ontology.business_relationship_builder import (
-    build_relationships
-)
-
-
-# =====================================
-# REPORTING
-# =====================================
-
-from reporting.process_report import (
-    print_processing_report
-)
-
 # =====================================
 # AI ENRICHMENT
 # =====================================
@@ -66,23 +53,15 @@ from lineage.lineage_builder import (
 )
 
 # =====================================
-# BUSINESS ONTOLOGY
+# ENTITY RELATIONSHIPS
 # =====================================
 
-from ontology.ontology_builder import (
-    build_ontology
+from ontology.relationship_parser import (
+    parse_relationships
 )
 
-from ontology.ontology_flow import (
-    build_process_flow
-)
-
-from ontology.unclassified import (
-    find_unclassified
-)
-
-from ontology.ontology_report import (
-    print_ontology_summary
+from ontology.business_relationship_builder import (
+    build_relationships
 )
 
 # =====================================
@@ -97,33 +76,33 @@ from governance.measure_scoring import (
     score_measure_coverage
 )
 
-from governance.ontology_scoring import (
-    score_ontology_coverage
-)
-
 from governance.health_score import (
     calculate_health_score
-)
-
-from governance.governance_report import (
-    print_governance_report
 )
 
 from governance.governance_builder import (
     build_governance_summary
 )
 
+from governance.governance_report import (
+    print_governance_report
+)
+
 # =====================================
-# EXPORT
+# REPORTING
+# =====================================
+
+from reporting.process_report import (
+    print_processing_report
+)
+
+# =====================================
+# EXCEL
 # =====================================
 
 from excel.exporter import (
     create_data_dictionary
 )
-
-# =====================================
-# MAIN
-# =====================================
 
 try:
 
@@ -137,17 +116,17 @@ try:
         model_path
     )
 
-    # --------------------
+    # ---------------------
     # Parse Model
-    # --------------------
+    # ---------------------
 
     tables = parse_model_folder(
         str(model_path)
     )
 
-    # --------------------
-    # AI Enrichment
-    # --------------------
+    # ---------------------
+    # Enrichment
+    # ---------------------
 
     tables = enrich_columns(
         tables
@@ -157,45 +136,33 @@ try:
         tables
     )
 
-    # --------------------
-    # Dependencies
-    # --------------------
+    # ---------------------
+    # Measure Dependencies
+    # ---------------------
 
     lineage = build_lineage(
         tables
     )
 
-    # --------------------
-    # Business Ontology
-    # --------------------
+    # ---------------------
+    # Relationships
+    # ---------------------
 
-    ontology = build_ontology(
-        tables,
-        lineage
-    )
-
-    process_flow = (
-        build_process_flow(
-            ontology
-        )
-    )
-
-    unclassified = (
-        find_unclassified(
-            tables,
-            ontology
+    raw_relationships = (
+        parse_relationships(
+            model_path
         )
     )
 
     entity_relationships = (
         build_relationships(
-            relationships
+            raw_relationships
         )
     )
 
-    # --------------------
+    # ---------------------
     # Governance
-    # --------------------
+    # ---------------------
 
     field_score = (
         score_field_coverage(
@@ -209,11 +176,7 @@ try:
         )
     )
 
-    ontology_score = (
-        score_ontology_coverage(
-            ontology
-        )
-    )
+    ontology_score = 100
 
     health_score = (
         calculate_health_score(
@@ -232,17 +195,13 @@ try:
         )
     )
 
-    # --------------------
-    # Console Output
-    # --------------------
+    # ---------------------
+    # Reporting
+    # ---------------------
 
     print_processing_report(
         model_name,
         tables
-    )
-
-    print_ontology_summary(
-        ontology
     )
 
     print_governance_report(
@@ -252,17 +211,15 @@ try:
         health_score
     )
 
-    # --------------------
-    # Export Workbook
-    # --------------------
+    # ---------------------
+    # Export
+    # ---------------------
 
     create_data_dictionary(
-        tables,
-        model_name,
-        ontology,
-        process_flow,
-        unclassified,
-        governance_summary
+        tables=tables,
+        model_name=model_name,
+        relationships=entity_relationships,
+        governance_summary=governance_summary
     )
 
     print(

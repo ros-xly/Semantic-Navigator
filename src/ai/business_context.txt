@@ -1,0 +1,43 @@
+Organisation:
+MMCG
+
+Industry:
+Healthcare and Care Homes
+
+Core Business Areas:
+
+Procurement
+Finance
+Property
+Resident Care
+Workforce
+Governance
+
+Business Terms:
+
+Resident:
+An individual receiving care services within an MMCG home.
+
+Care Home:
+An MMCG operated care facility.
+
+Supplier:
+A third-party organisation providing goods or services.
+
+Purchase Order:
+An authorised request issued to a supplier.
+
+Invoice:
+A supplier billing document submitted for payment.
+
+Cost Centre:
+A business area responsible for expenditure.
+
+Deviation:
+A variance between expected and actual procurement activity.
+
+Goods Receipt:
+Confirmation that ordered goods have been received.
+
+Purchase To Pay:
+The end-to-end procurement lifecycle from requisition through payment.

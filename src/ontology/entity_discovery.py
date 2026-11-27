@@ -19,19 +19,33 @@ def discover_entity(
             messages=[
 
                 {
-                    "role": "user",
+                    "role": "system",
 
                     "content":
-                    f"""
-Convert this table
-into a business entity.
+                    """
+Convert table names
+into business entities.
 
-Table:
+Examples:
 
-{table_name}
+P2P_Purchase_Orders
+    -> Purchase Order
+
+P2P_Invoice_Details
+    -> Invoice
+
+Master_CostCentre
+    -> Cost Centre
 
 Return only entity name.
 """
+                },
+
+                {
+                    "role": "user",
+
+                    "content":
+                    table_name
                 }
 
             ]
@@ -40,9 +54,7 @@ Return only entity name.
     )
 
     return (
-
         response.choices[0]
         .message.content
         .strip()
-
     )

@@ -14,6 +14,10 @@ def parse_relationships(
         / "relationships.tmdl"
     )
 
+    if not relationship_file.exists():
+
+        return relationships
+
     with open(
         relationship_file,
         encoding="utf-8"
@@ -37,7 +41,8 @@ def parse_relationships(
                 stripped.replace(
                     "fromColumn:",
                     ""
-                ).strip()
+                )
+                .strip()
             )
 
         elif stripped.startswith(
@@ -48,7 +53,8 @@ def parse_relationships(
                 stripped.replace(
                     "toColumn:",
                     ""
-                ).strip()
+                )
+                .strip()
             )
 
             relationships.append(

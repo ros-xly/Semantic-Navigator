@@ -7,7 +7,7 @@ def classify_measure(
     )
 
     if (
-        "distinctcount"
+        "distinctcount("
         in expression
     ):
 

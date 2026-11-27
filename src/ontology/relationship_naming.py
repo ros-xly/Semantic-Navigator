@@ -20,34 +20,42 @@ def discover_relationship(
             messages=[
 
                 {
-                    "role": "user",
+                    "role": "system",
 
                     "content":
-                    f"""
-Source:
-
-{source_entity}
-
-Target:
-
-{target_entity}
-
-Provide business
-relationship.
+                    """
+Provide a business relationship.
 
 Examples:
 
 Receives
 
-Generates
-
-Charged To
-
 Creates
+
+Generates
 
 Is Matched To
 
-Return only phrase.
+Charged To
+
+Belongs To
+
+Return only the phrase.
+"""
+                },
+
+                {
+                    "role": "user",
+
+                    "content":
+                    f"""
+Source Entity:
+
+{source_entity}
+
+Target Entity:
+
+{target_entity}
 """
                 }
 
@@ -57,9 +65,7 @@ Return only phrase.
     )
 
     return (
-
         response.choices[0]
         .message.content
         .strip()
-
     )
